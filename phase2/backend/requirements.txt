@@ -1,0 +1,18 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+duckdb>=0.10
+pandas>=2.0
+pydantic>=2.0
+joblib>=1.3
+# Pinned to match the scikit-learn version the Phase 1 model artifact was
+# pickled with (see final_best_model_pipeline.joblib). Installing a newer
+# sklearn works today but throws InconsistentVersionWarning and is not
+# guaranteed to reproduce identical predictions across versions.
+scikit-learn==1.9.0
+xgboost>=2.0
+requests>=2.31
+
+# --- Phase 3: AI FMCG Analyst chatbot ---
+groq>=0.32,<1          # Groq LLM client (tool calling)
+langgraph>=0.6,<0.7    # agent orchestration
+python-dotenv>=1.0     # loads GROQ_API_KEY from a local .env in dev

@@ -1,0 +1,152 @@
+{
+  "JU-021": {
+    "brand": "JuBrand3",
+    "category": "Juice",
+    "segment": "Juice-Seg3"
+  },
+  "MI-002": {
+    "brand": "MiBrand2",
+    "category": "Milk",
+    "segment": "Milk-Seg1"
+  },
+  "MI-006": {
+    "brand": "MiBrand1",
+    "category": "Milk",
+    "segment": "Milk-Seg3"
+  },
+  "MI-008": {
+    "brand": "MiBrand3",
+    "category": "Milk",
+    "segment": "Milk-Seg2"
+  },
+  "MI-011": {
+    "brand": "MiBrand1",
+    "category": "Milk",
+    "segment": "Milk-Seg2"
+  },
+  "MI-022": {
+    "brand": "MiBrand3",
+    "category": "Milk",
+    "segment": "Milk-Seg2"
+  },
+  "MI-023": {
+    "brand": "MiBrand3",
+    "category": "Milk",
+    "segment": "Milk-Seg3"
+  },
+  "MI-026": {
+    "brand": "MiBrand4",
+    "category": "Milk",
+    "segment": "Milk-Seg2"
+  },
+  "RE-004": {
+    "brand": "ReBrand1",
+    "category": "ReadyMeal",
+    "segment": "ReadyMeal-Seg2"
+  },
+  "RE-007": {
+    "brand": "ReBrand4",
+    "category": "ReadyMeal",
+    "segment": "ReadyMeal-Seg1"
+  },
+  "RE-015": {
+    "brand": "ReBrand4",
+    "category": "ReadyMeal",
+    "segment": "ReadyMeal-Seg1"
+  },
+  "RE-017": {
+    "brand": "ReBrand2",
+    "category": "ReadyMeal",
+    "segment": "ReadyMeal-Seg2"
+  },
+  "RE-025": {
+    "brand": "ReBrand2",
+    "category": "ReadyMeal",
+    "segment": "ReadyMeal-Seg3"
+  },
+  "SN-010": {
+    "brand": "SnBrand2",
+    "category": "SnackBar",
+    "segment": "SnackBar-Seg2"
+  },
+  "SN-013": {
+    "brand": "SnBrand3",
+    "category": "SnackBar",
+    "segment": "SnackBar-Seg2"
+  },
+  "SN-019": {
+    "brand": "SnBrand2",
+    "category": "SnackBar",
+    "segment": "SnackBar-Seg1"
+  },
+  "SN-027": {
+    "brand": "SnBrand2",
+    "category": "SnackBar",
+    "segment": "SnackBar-Seg3"
+  },
+  "SN-028": {
+    "brand": "SnBrand2",
+    "category": "SnackBar",
+    "segment": "SnackBar-Seg1"
+  },
+  "SN-030": {
+    "brand": "SnBrand2",
+    "category": "SnackBar",
+    "segment": "SnackBar-Seg1"
+  },
+  "YO-001": {
+    "brand": "YoBrand3",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg1"
+  },
+  "YO-003": {
+    "brand": "YoBrand1",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg3"
+  },
+  "YO-005": {
+    "brand": "YoBrand2",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg1"
+  },
+  "YO-009": {
+    "brand": "YoBrand4",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg1"
+  },
+  "YO-012": {
+    "brand": "YoBrand1",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg2"
+  },
+  "YO-014": {
+    "brand": "YoBrand4",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg3"
+  },
+  "YO-016": {
+    "brand": "YoBrand3",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg3"
+  },
+  "YO-018": {
+    "brand": "YoBrand2",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg1"
+  },
+  "YO-020": {
+    "brand": "YoBrand3",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg2"
+  },
+  "YO-024": {
+    "brand": "YoBrand2",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg3"
+  },
+  "YO-029": {
+    "brand": "YoBrand4",
+    "category": "Yogurt",
+    "segment": "Yogurt-Seg2"
+  }
+}

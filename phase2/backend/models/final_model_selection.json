@@ -1,0 +1,11 @@
+{
+  "final_model": "XGBoost",
+  "final_model_test_rmse": 7.84388303510269,
+  "final_model_test_r2": 0.5137012486333872,
+  "final_model_test_mae": 5.43349866071759,
+  "final_model_test_mape_pct": 22.03138611337832,
+  "best_baseline": "Baseline (Historical Group Mean)",
+  "best_baseline_test_rmse": 11.595761774950738,
+  "best_baseline_test_r2": -0.0627705358386405,
+  "ml_beats_baseline": true
+}

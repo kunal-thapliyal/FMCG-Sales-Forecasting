@@ -1,0 +1,45 @@
+{
+  "grain": "date x sku x region x channel",
+  "target": "units_sold",
+  "categorical_features": [
+    "sku",
+    "region",
+    "channel",
+    "pack_type",
+    "category"
+  ],
+  "numeric_features": [
+    "price_unit",
+    "promotion_flag",
+    "delivery_days",
+    "stock_available",
+    "delivered_qty",
+    "year",
+    "month",
+    "quarter",
+    "day_of_week",
+    "is_weekend",
+    "day_of_year",
+    "week_of_year",
+    "month_sin",
+    "month_cos",
+    "dow_sin",
+    "dow_cos",
+    "days_since_launch",
+    "lag_1",
+    "lag_7",
+    "lag_14",
+    "lag_28",
+    "roll_mean_7",
+    "roll_mean_14",
+    "roll_mean_28",
+    "roll_std_7",
+    "expanding_mean"
+  ],
+  "split_keys": [
+    "date",
+    "sku",
+    "region",
+    "channel"
+  ]
+}
