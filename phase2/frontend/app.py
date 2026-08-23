@@ -46,11 +46,18 @@ def main():
     opts = api.get_filter_options()
     filters = render_sidebar_filters(opts)
 
+    # page = st.sidebar.radio(
+    #     "Go to",
+    #     ["Overview", "Sales Trends", "Compare", "Inventory & Promotions", "Explore Data",
+    #      "Forecast", "AI FMCG Analyst"],
+    #     index=0,
+    # )
+
     page = st.sidebar.radio(
         "Go to",
         ["Overview", "Sales Trends", "Compare", "Inventory & Promotions", "Explore Data",
-         "Forecast", "AI FMCG Analyst"],
-        index=0,
+         "Forecast"],
+         index=0,
     )
 
     if page == "Overview":
@@ -65,8 +72,9 @@ def main():
         pg.render_explore(filters)
     elif page == "Forecast":
         pg.render_forecast()
-    elif page == "AI FMCG Analyst":
-        pg.render_ai_analyst()
+    # elif page == "AI FMCG Analyst":
+    #     pg.render_ai_analyst()
+    pg.render_ai_analyst()
 
 
 if __name__ == "__main__":

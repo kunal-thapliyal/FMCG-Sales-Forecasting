@@ -728,84 +728,379 @@ def render_forecast():
             )
 
 
+# def render_ai_analyst():
+#     """
+#     AI FMCG Analyst chat page.
+
+#     Uses the existing FastAPI /chat endpoint, which routes
+#     questions through the Groq + LangGraph agent and the
+#     existing sales, inventory, promotion, and forecasting tools.
+#     """
+
+#     st.title("🤖 AI FMCG Analyst")
+#     st.caption(
+#         "Ask questions in plain English about sales, inventory, "
+#         "promotions, and future forecasts."
+#     )
+
+#     if "ai_analyst_history" not in st.session_state:
+#         st.session_state.ai_analyst_history = []
+
+#     with st.expander("Example Questions"):
+#         st.markdown(
+#             "- What were Juice sales in 2024?\n"
+#             "- Which category had the highest sales?\n"
+#             "- Compare Retail and E-commerce.\n"
+#             "- Which region has the highest average inventory?\n"
+#             "- Did promotions increase sales?\n"
+#             "- Forecast MI-006 sales for January 1, 2025.\n"
+#             "- Which SKU generated the most revenue in 2024?"
+#         )
+
+#     for turn in st.session_state.ai_analyst_history:
+#         with st.chat_message(turn["role"]):
+#             st.markdown(turn["content"])
+
+#     user_question = st.chat_input(
+#         "Ask about sales, inventory, promotions, or forecasts..."
+#     )
+
+#     if user_question:
+#         st.session_state.ai_analyst_history.append(
+#             {
+#                 "role": "user",
+#                 "content": user_question
+#             }
+#         )
+
+#         with st.chat_message("user"):
+#             st.markdown(user_question)
+
+#         with st.chat_message("assistant"):
+#             with st.spinner("Analyzing your question..."):
+#                 response = api.chat(
+#                     user_question,
+#                     st.session_state.ai_analyst_history[:-1]
+#                 )
+
+#             if response is None:
+#                 answer = (
+#                     "Sorry, I couldn't reach the analytics service. "
+#                     "Please try again."
+#                 )
+#                 st.error(answer)
+
+#             else:
+#                 answer = response.get(
+#                     "answer",
+#                     "I couldn't generate an answer for that question."
+#                 )
+
+#                 st.markdown(answer)
+
+#         st.session_state.ai_analyst_history.append(
+#             {
+#                 "role": "assistant",
+#                 "content": answer
+#             }
+#         )
+
+#     if st.session_state.ai_analyst_history:
+#         if st.button("Clear Conversation"):
+#             st.session_state.ai_analyst_history = []
+            # st.rerun()
+
 def render_ai_analyst():
     """
-    AI FMCG Analyst chat page.
+    Floating AI FMCG Analyst chatbot.
 
-    Uses the existing FastAPI /chat endpoint, which routes
-    questions through the Groq + LangGraph agent and the
-    existing sales, inventory, promotion, and forecasting tools.
+    The chatbot is available on every page. It opens automatically
+    on the first visit and can be minimized/reopened using the
+    floating robot button.
     """
 
-    st.title("🤖 AI FMCG Analyst")
-    st.caption(
-        "Ask questions in plain English about sales, inventory, "
-        "promotions, and future forecasts."
-    )
+    from streamlit_float import float_init
 
+    # Initialize floating containers
+    float_init()
+
+    # ---------------------------------------------------------
+    # Session state
+    # ---------------------------------------------------------
     if "ai_analyst_history" not in st.session_state:
         st.session_state.ai_analyst_history = []
 
-    with st.expander("Example Questions"):
-        st.markdown(
-            "- What were Juice sales in 2024?\n"
-            "- Which category had the highest sales?\n"
-            "- Compare Retail and E-commerce.\n"
-            "- Which region has the highest average inventory?\n"
-            "- Did promotions increase sales?\n"
-            "- Forecast MI-006 sales for January 1, 2025.\n"
-            "- Which SKU generated the most revenue in 2024?"
+    if "ai_analyst_open" not in st.session_state:
+        # Open automatically on first visit
+        st.session_state.ai_analyst_open = True
+
+    # ---------------------------------------------------------
+    # Floating chatbot window
+    # ---------------------------------------------------------
+    if st.session_state.ai_analyst_open:
+
+        chat_container = st.container()
+
+        with chat_container:
+
+            # Header
+            header_col1, header_col2 = st.columns([8, 1])
+
+            with header_col1:
+                st.markdown(
+                    """
+                    <div style="
+                        font-size: 1.15rem;
+                        font-weight: 700;
+                        padding-top: 4px;
+                    ">
+                        🤖 FMCG Analyst
+                    </div>
+
+                    <div style="
+                        font-size: 0.78rem;
+                        color: #22c55e;
+                        margin-top: -4px;
+                    ">
+                        ● Online
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            with header_col2:
+                if st.button(
+                    "×",
+                    key="ai_close",
+                    help="Close AI Analyst",
+                ):
+                    st.session_state.ai_analyst_open = False
+                    st.rerun()
+
+            st.divider()
+
+            # -------------------------------------------------
+            # Welcome message
+            # -------------------------------------------------
+            if not st.session_state.ai_analyst_history:
+                st.markdown(
+                    """
+                    <div style="
+                        background: #f3f6fb;
+                        border-radius: 14px;
+                        padding: 14px;
+                        margin-bottom: 10px;
+                    ">
+                        <div style="
+                            font-size: 1rem;
+                            font-weight: 600;
+                            margin-bottom: 6px;
+                        ">
+                            Hi! 👋 I'm your FMCG Analyst
+                        </div>
+
+                        <div style="
+                            font-size: 0.88rem;
+                            line-height: 1.45;
+                        ">
+                            I can help you analyze sales, revenue,
+                            inventory, promotions, and forecasts.
+                        </div>
+
+                        <div style="
+                            font-size: 0.88rem;
+                            font-weight: 600;
+                            margin-top: 10px;
+                        ">
+                            What would you like to know?
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                st.caption("💡 Try asking:")
+
+                example_questions = [
+                    "What were the total sales in 2024?",
+                    "Which category had the highest sales?",
+                    "Which region has the highest average inventory?",
+                    "Did promotions increase sales?",
+                ]
+
+                for i, question in enumerate(example_questions):
+                    if st.button(
+                        question,
+                        key=f"ai_example_{i}",
+                        use_container_width=True,
+                    ):
+                        st.session_state.ai_pending_question = question
+                        st.rerun()
+
+            # -------------------------------------------------
+            # Conversation
+            # -------------------------------------------------
+            history_container = st.container(height=280)
+
+            with history_container:
+                for turn in st.session_state.ai_analyst_history:
+                    with st.chat_message(
+                        turn["role"],
+                        avatar="🤖" if turn["role"] == "assistant" else "👤",
+                    ):
+                        st.markdown(turn["content"])
+
+            # -------------------------------------------------
+            # Chat input
+            # -------------------------------------------------
+            user_question = st.chat_input(
+                "Ask about sales, revenue, inventory or forecasts...",
+                key="ai_chat_input",
+            )
+
+            # Example question selected
+            if (
+                "ai_pending_question" in st.session_state
+                and st.session_state.ai_pending_question
+            ):
+                user_question = st.session_state.ai_pending_question
+                st.session_state.ai_pending_question = None
+
+            # -------------------------------------------------
+            # Process question
+            # -------------------------------------------------
+            if user_question:
+
+                st.session_state.ai_analyst_history.append(
+                    {
+                        "role": "user",
+                        "content": user_question,
+                    }
+                )
+
+                with st.spinner("Analyzing your question..."):
+
+                    response = api.chat(
+                        user_question,
+                        st.session_state.ai_analyst_history[:-1],
+                    )
+
+                if response is None:
+                    answer = (
+                        "Sorry, I couldn't reach the analytics service. "
+                        "Please try again."
+                    )
+                    st.error(answer)
+
+                else:
+                    answer = response.get(
+                        "answer",
+                        "I couldn't generate an answer for that question.",
+                    )
+
+                st.session_state.ai_analyst_history.append(
+                    {
+                        "role": "assistant",
+                        "content": answer,
+                    }
+                )
+
+                st.rerun()
+
+            # -------------------------------------------------
+            # Footer
+            # -------------------------------------------------
+            footer_col1, footer_col2 = st.columns([5, 2])
+
+            with footer_col1:
+                st.caption("⚡ Powered by Groq + LangGraph")
+
+            with footer_col2:
+                if st.button(
+                    "Clear",
+                    key="ai_clear",
+                    use_container_width=True,
+                ):
+                    st.session_state.ai_analyst_history = []
+                    st.rerun()
+
+        # Float the entire chat window
+        chat_container.float(
+            """
+            width: 390px;
+            max-width: calc(100vw - 2rem);
+            right: 1rem;
+            bottom: 5.2rem;
+            z-index: 9999;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.22);
+            """
         )
 
-    for turn in st.session_state.ai_analyst_history:
-        with st.chat_message(turn["role"]):
-            st.markdown(turn["content"])
+    # ---------------------------------------------------------
+    # Floating robot launcher
+    # ---------------------------------------------------------
 
-    user_question = st.chat_input(
-        "Ask about sales, inventory, promotions, or forecasts..."
+    launcher = st.container()
+
+    with launcher:
+
+        if st.button(
+            "🤖",
+            key="ai_launcher",
+            help="Open FMCG Analyst",
+        ):
+            st.session_state.ai_analyst_open = True
+            st.rerun()
+
+    launcher.float(
+        """
+        width: 58px;
+        height: 58px;
+        right: 1.2rem;
+        bottom: 1.8rem;
+        z-index: 10000;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.40);
+        padding: 0;
+        text-align: center;
+        """
     )
 
-    if user_question:
-        st.session_state.ai_analyst_history.append(
-            {
-                "role": "user",
-                "content": user_question
+    # ---------------------------------------------------------
+    # Robot button styling
+    # ---------------------------------------------------------
+    st.markdown(
+        """
+        <style>
+
+        /* Floating robot button */
+        div[data-testid="stButton"] button[kind="secondary"] {
+            border-radius: 50%;
+        }
+
+        /* Make the robot emoji larger */
+        div[data-testid="stButton"] button {
+            font-size: 1.45rem;
+        }
+
+        /* Chat window buttons */
+        div[data-testid="stVerticalBlock"] button {
+            border-radius: 10px;
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            .floating {
+                right: 0.6rem !important;
             }
-        )
+        }
 
-        with st.chat_message("user"):
-            st.markdown(user_question)
-
-        with st.chat_message("assistant"):
-            with st.spinner("Analyzing your question..."):
-                response = api.chat(
-                    user_question,
-                    st.session_state.ai_analyst_history[:-1]
-                )
-
-            if response is None:
-                answer = (
-                    "Sorry, I couldn't reach the analytics service. "
-                    "Please try again."
-                )
-                st.error(answer)
-
-            else:
-                answer = response.get(
-                    "answer",
-                    "I couldn't generate an answer for that question."
-                )
-
-                st.markdown(answer)
-
-        st.session_state.ai_analyst_history.append(
-            {
-                "role": "assistant",
-                "content": answer
-            }
-        )
-
-    if st.session_state.ai_analyst_history:
-        if st.button("Clear Conversation"):
-            st.session_state.ai_analyst_history = []
-            st.rerun()
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )     
