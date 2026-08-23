@@ -940,7 +940,7 @@ def render_ai_analyst():
             # -------------------------------------------------
             # Conversation
             # -------------------------------------------------
-            history_container = st.container(height=280)
+            history_container = st.container(height=200)
 
             with history_container:
                 for turn in st.session_state.ai_analyst_history:
@@ -1025,18 +1025,33 @@ def render_ai_analyst():
                     st.rerun()
 
         # Float the entire chat window
+        # chaat_container.float(
+        #     """
+        #     width: 390px;
+        #     mx-width: calc(100vw - 2rem);
+        #     right: 1rem;
+        #     bottom: 5.2rem;
+        #     z-index: 9999;
+        #     background: white;
+        #     border: 1px solid rgba(0, 0, 0, 0.12);
+        #     border-radius: 18px;
+        #     padding: 16px;
+        #     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.22);
+        #     """
+        # )
+
         chat_container.float(
             """
-            width: 390px;
-            max-width: calc(100vw - 2rem);
-            right: 1rem;
-            bottom: 5.2rem;
+            width: 330px;
+            max-width: calc(100vw - 1.5rem);
+            right: 0.8rem;
+            bottom: 5.5rem;
             z-index: 9999;
-            background: white;
+            background: #ffffff;
             border: 1px solid rgba(0, 0, 0, 0.12);
-            border-radius: 18px;
-            padding: 16px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.22);
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
             """
         )
 
@@ -1058,9 +1073,9 @@ def render_ai_analyst():
 
     launcher.float(
         """
-        width: 58px;
-        height: 58px;
-        right: 1.2rem;
+        width: 52px;
+        height: 52px;
+        right: 1.0rem;
         bottom: 1.8rem;
         z-index: 10000;
         border-radius: 50%;
