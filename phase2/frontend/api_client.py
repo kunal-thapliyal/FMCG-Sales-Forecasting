@@ -26,10 +26,13 @@ def _get(path, params=None):
         st.error(f"API error: {e.response.status_code} — {e.response.text}")
         st.stop()
 
-
-def _post(path, json_body):
+def _post(path, json_body, timeout=30):
     try:
-        resp = requests.post(f"{API_BASE}{path}", json=json_body, timeout=30)
+        resp = requests.post(
+            f"{API_BASE}{path}",
+            json=json_body,
+            timeout=timeout
+        )
         resp.raise_for_status()
         return resp.json()
     except requests.exceptions.ConnectionError:
@@ -38,6 +41,12 @@ def _post(path, json_body):
             f"`uvicorn main:app --port 8000` from the backend/ directory."
         )
         st.stop()
+    except requests.exceptions.Timeout:
+        st.error(
+            "The AI Analyst is taking longer than expected to respond. "
+            "Please try the question again."
+        )
+        return None
     except requests.exceptions.HTTPError as e:
         st.error(f"API error: {e.response.status_code} — {e.response.text}")
         return None
@@ -107,9 +116,9 @@ def predict(payload: dict):
 
 
 def chat(message: str, history: list):
-    """Calls the Phase 3 /chat endpoint. `history` is a list of
-    {"role": "user"|"assistant", "content": str} dicts. Returns
-    {"answer": str, "tool_calls": [...]}, or None on a request-level failure
-    (a configuration issue like a missing GROQ_API_KEY comes back as a normal
-    200 response with an explanatory `answer`, not an error)."""
-    return _post("/chat", {"message": message, "history": history})
+    """Calls the Phase 3 /chat endpoint."""
+    return _post(
+        "/chat",
+        {"message": message, "history": history},
+        timeout=90
+    )
