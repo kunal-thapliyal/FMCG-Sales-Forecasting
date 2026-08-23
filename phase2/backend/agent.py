@@ -94,13 +94,22 @@ def _agent_node(state: AgentState) -> dict:
             tools=chat_tools.TOOLS,
             tool_choice="auto",
         )
+    # except Exception as e:
+    #     return {
+    #         "messages": [{
+    #             "role": "assistant",
+    #             "content": f"The AI Analyst hit an error calling the language model: {e}",
+    #         }],
+    #     }
     except Exception as e:
+        print(f"[AI ANALYST] Groq error: {type(e).__name__}: {e}")
         return {
             "messages": [{
                 "role": "assistant",
-                "content": f"The AI Analyst hit an error calling the language model: {e}",
-            }],
-        }
+                "content": "The AI Analyst encountered an error while processing the request.",
+                }],
+            }
+
 
     choice = response.choices[0].message
     msg = {"role": "assistant", "content": choice.content or ""}
@@ -181,11 +190,36 @@ def run_chat(message: str, history: List[dict]) -> dict:
             "tool_calls": [],
         }
 
-    clean_history = [
-        {"role": m["role"], "content": m.get("content", "")}
-        for m in history if m.get("role") in ("user", "assistant") and m.get("content")
+    # Keep only the most recent conversation turns.
+# This preserves follow-up context without allowing the chat history
+# to grow indefinitely.
+        
+    clean_history = []
+    for m in history:
+        role = m.get("role")
+        content = m.get("content")
+
+        if role in ("user", "assistant") and isinstance(content, str) and content.strip():
+            clean_history.append({
+                "role": role,
+                "content": content.strip(),
+            })
+
+# Keep the latest 6 messages (3 user/assistant exchanges).
+    clean_history = clean_history[-6:]
+
+    initial_messages = clean_history + [
+        {
+            "role": "user",
+            "content": message.strip(),
+        }
     ]
-    initial_messages = clean_history + [{"role": "user", "content": message}]
+
+    # clean_history = [
+    #     {"role": m["role"], "content": m.get("content", "")}
+    #     for m in history if m.get("role") in ("user", "assistant") and m.get("content")
+    # ]
+    # initial_messages = clean_history + [{"role": "user", "content": message}]
 
     try:
         final_state = _graph().invoke({"messages": initial_messages, "rounds": 0})

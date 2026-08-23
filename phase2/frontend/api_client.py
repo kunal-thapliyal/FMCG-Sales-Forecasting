@@ -41,12 +41,19 @@ def _post(path, json_body, timeout=30):
             f"`uvicorn main:app --port 8000` from the backend/ directory."
         )
         st.stop()
+
     except requests.exceptions.Timeout:
         st.error(
-            "The AI Analyst is taking longer than expected to respond. "
-            "Please try the question again."
+            f"AI Analyst request timed out after {timeout} seconds. "
+            f"API: {API_BASE}{path}"
         )
         return None
+    # except requests.exceptions.Timeout:
+    #     st.error(
+    #         "The AI Analyst is taking longer than expected to respond. "
+    #         "Please try the question again."
+    #     )
+    #     return None
     except requests.exceptions.HTTPError as e:
         st.error(f"API error: {e.response.status_code} — {e.response.text}")
         return None

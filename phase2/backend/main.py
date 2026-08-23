@@ -219,4 +219,8 @@ def chat(req: ChatRequest):
     it isn't, returns a normal 200 response explaining that the chat isn't
     configured (never a 500 — this must not affect the rest of the API)."""
     import agent  # lazy import, see note above
-    return agent.run_chat(message=req.message, history=[h.model_dump() for h in req.history])
+    # return agent.run_chat(message=req.message, history=[h.model_dump() for h in req.history])
+    return agent.run_chat(
+        message=req.message,
+        history=req.history,
+    )
