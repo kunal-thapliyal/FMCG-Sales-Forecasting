@@ -810,18 +810,406 @@ def render_forecast():
 #             st.session_state.ai_analyst_history = []
             # st.rerun()
 
+# def render_ai_analyst():
+#     """
+#     Floating AI FMCG Analyst chatbot.
+#     """
+
+#     from streamlit_float import float_init
+
+#     float_init()
+
+#     # ---------------------------------------------------------
+#     # Session state
+#     # ---------------------------------------------------------
+#     if "ai_analyst_history" not in st.session_state:
+#         st.session_state.ai_analyst_history = []
+
+#     if "ai_analyst_open" not in st.session_state:
+#         st.session_state.ai_analyst_open = True
+
+#     # ---------------------------------------------------------
+#     # Floating chatbot
+#     # ---------------------------------------------------------
+#     if st.session_state.ai_analyst_open:
+
+#         chat_container = st.container()
+
+#         with chat_container:
+
+#             # Header
+#             header_col1, header_col2 = st.columns([8, 1])
+
+#             with header_col1:
+#                 st.markdown(
+#                     """
+#                     <div style="
+#                         font-size: 1rem;
+#                         font-weight: 700;
+#                         color: #f5f7fa;
+#                         margin-bottom: 1px;
+#                     ">
+#                         🤖 FMCG Analyst
+#                     </div>
+
+#                     <div style="
+#                         font-size: 0.68rem;
+#                         color: #22c55e;
+#                     ">
+#                         ● Online
+#                     </div>
+#                     """,
+#                     unsafe_allow_html=True,
+#                 )
+
+#             with header_col2:
+#                 if st.button(
+#                     "×",
+#                     key="ai_close",
+#                     help="Close AI Analyst",
+#                 ):
+#                     st.session_state.ai_analyst_open = False
+#                     st.rerun()
+
+#             # -------------------------------------------------
+#             # Welcome message
+#             # -------------------------------------------------
+#             if not st.session_state.ai_analyst_history:
+
+#                 st.markdown(
+#                     """
+#                     <div style="
+#                         background: #20232c;
+#                         border-radius: 10px;
+#                         padding: 9px;
+#                         margin: 5px 0 7px 0;
+#                     ">
+#                         <div style="
+#                             font-size: 0.82rem;
+#                             font-weight: 600;
+#                             color: #f5f7fa;
+#                             margin-bottom: 3px;
+#                         ">
+#                             Hi! 👋 How can I help?
+#                         </div>
+
+#                         <div style="
+#                             font-size: 0.70rem;
+#                             line-height: 1.35;
+#                             color: #b8bec9;
+#                         ">
+#                             Ask me about sales, revenue, inventory,
+#                             promotions or forecasts.
+#                         </div>
+#                     </div>
+#                     """,
+#                     unsafe_allow_html=True,
+#                 )
+
+#                 st.markdown(
+#                     """
+#                     <div style="
+#                         font-size: 0.70rem;
+#                         color: #9ca3af;
+#                         margin-bottom: 3px;
+#                     ">
+#                         💡 Try asking
+#                     </div>
+#                     """,
+#                     unsafe_allow_html=True,
+#                 )
+
+#                 # Keep examples compact
+#                 example_questions = [
+#                     "Total sales in 2024?",
+#                     "Highest-selling category?",
+#                     "Highest inventory region?",
+#                     "Did promotions increase sales?",
+#                 ]
+
+#                 for i, question in enumerate(example_questions):
+
+#                     if st.button(
+#                         question,
+#                         key=f"ai_example_{i}",
+#                         use_container_width=True,
+#                     ):
+#                         st.session_state.ai_pending_question = question
+#                         st.rerun()
+
+#             # -------------------------------------------------
+#             # Conversation history
+#             # -------------------------------------------------
+#             history_container = st.container(height=100)
+
+#             with history_container:
+
+#                 for turn in st.session_state.ai_analyst_history:
+
+#                     with st.chat_message(
+#                         turn["role"],
+#                         avatar="🤖" if turn["role"] == "assistant" else "👤",
+#                     ):
+#                         st.markdown(turn["content"])
+
+#             # -------------------------------------------------
+#             # Chat input
+#             # -------------------------------------------------
+#             user_question = st.chat_input(
+#                 "Ask about sales, revenue, inventory...",
+#                 key="ai_chat_input",
+#             )
+
+#             # Example question selected
+#             if (
+#                 "ai_pending_question" in st.session_state
+#                 and st.session_state.ai_pending_question
+#             ):
+#                 user_question = st.session_state.ai_pending_question
+#                 st.session_state.ai_pending_question = None
+
+#             # -------------------------------------------------
+#             # Process question
+#             # -------------------------------------------------
+#             if user_question:
+
+#                 st.session_state.ai_analyst_history.append(
+#                     {
+#                         "role": "user",
+#                         "content": user_question,
+#                     }
+#                 )
+
+#                 with st.spinner("Analyzing..."):
+
+#                     response = api.chat(
+#                         user_question,
+#                         st.session_state.ai_analyst_history[:-1],
+#                     )
+
+#                 if response is None:
+#                     answer = (
+#                         "Sorry, I couldn't reach the analytics service. "
+#                         "Please try again."
+#                     )
+#                     st.error(answer)
+
+#                 else:
+#                     answer = response.get(
+#                         "answer",
+#                         "I couldn't generate an answer for that question.",
+#                     )
+
+#                 st.session_state.ai_analyst_history.append(
+#                     {
+#                         "role": "assistant",
+#                         "content": answer,
+#                     }
+#                 )
+
+#                 st.rerun()
+
+#             # -------------------------------------------------
+#             # Clear button
+#             # -------------------------------------------------
+#             if st.session_state.ai_analyst_history:
+
+#                 if st.button(
+#                     "Clear conversation",
+#                     key="ai_clear",
+#                     use_container_width=True,
+#                 ):
+#                     st.session_state.ai_analyst_history = []
+#                     st.rerun()
+
+#         # -----------------------------------------------------
+#         # Float chat window
+#         # -----------------------------------------------------
+#         chat_container.float(
+#             """
+#             width: 300px;
+#             max-width: calc(100vw - 1rem);
+
+#             right: 0.75rem;
+#             bottom: 5.2rem;
+
+#             height: auto;
+#             max-height: 470px;
+
+#             z-index: 9999;
+
+#             background: #16181f;
+#             color: #f5f7fa;
+
+#             border: 1px solid #30333d;
+#             border-radius: 16px;
+
+#             padding: 10px;
+
+#             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+#             overflow-y: auto;
+#             overflow-x: hidden;
+#             """
+#         )
+
+#     # ---------------------------------------------------------
+#     # Robot launcher
+#     # ---------------------------------------------------------
+
+#     launcher = st.container()
+
+#     with launcher:
+
+#         if st.button(
+#             "🤖",
+#             key="ai_launcher",
+#             help="Open FMCG Analyst",
+#         ):
+#             st.session_state.ai_analyst_open = True
+#             st.rerun()
+
+#     launcher.float(
+#         """
+#         width: 46px;
+#         height: 46px;
+
+#         right: 0.9rem;
+#         bottom: 4.6rem;
+
+#         z-index: 10000;
+
+#         border-radius: 50%;
+
+#         background: linear-gradient(
+#             135deg,
+#             #2563eb,
+#             #1d4ed8
+#         );
+
+#         box-shadow:
+#             0 6px 18px rgba(37, 99, 235, 0.40);
+
+#         padding: 0;
+#         text-align: center;
+#         """
+#     )
+
+#     # ---------------------------------------------------------
+#     # Styling
+#     # ---------------------------------------------------------
+
+#     st.markdown(
+#         """
+#         <style>
+
+#         /* ================================
+#            FMCG AI ANALYST
+#            ================================ */
+
+#         /* General buttons */
+#         div[data-testid="stButton"] > button {
+#             border-radius: 9px;
+#             border: 1px solid #30333d;
+#             background: #20232c;
+#             color: #f5f7fa;
+
+#             font-size: 0.72rem;
+#             padding: 5px 8px;
+
+#             min-height: 32px;
+
+#             transition: 0.2s ease;
+#         }
+
+#         div[data-testid="stButton"] > button:hover {
+#             border-color: #3b82f6;
+#             background: #272b36;
+#             color: #ffffff;
+#         }
+
+#         /* Close button */
+#         button[aria-label="Close AI Analyst"] {
+#             background: transparent !important;
+#             border: none !important;
+
+#             color: #9ca3af !important;
+
+#             font-size: 1.15rem !important;
+#             padding: 0 !important;
+
+#             min-height: 25px !important;
+#         }
+
+#         button[aria-label="Close AI Analyst"]:hover {
+#             color: #ffffff !important;
+#             background: transparent !important;
+#         }
+
+#         /* Chat input */
+#         div[data-testid="stChatInput"] {
+#             background: #20232c !important;
+#             border: 1px solid #3a3e49 !important;
+#             border-radius: 10px !important;
+
+#             margin-top: 5px !important;
+#         }
+
+#         div[data-testid="stChatInput"] textarea {
+#             background: #20232c !important;
+#             color: #f5f7fa !important;
+
+#             font-size: 0.75rem !important;
+#         }
+
+#         div[data-testid="stChatInput"] textarea::placeholder {
+#             color: #8f96a3 !important;
+#         }
+
+#         /* Chat messages */
+#         div[data-testid="stChatMessage"] {
+#             background: #20232c !important;
+
+#             border-radius: 9px !important;
+
+#             padding: 6px !important;
+
+#             margin-bottom: 4px !important;
+
+#             font-size: 0.75rem !important;
+#         }
+
+#         /* Spinner */
+#         div[data-testid="stSpinner"] {
+#             color: #60a5fa !important;
+#         }
+
+#         /* Hide unnecessary spacing */
+#         div[data-testid="stVerticalBlock"] {
+#             gap: 0.25rem;
+#         }
+
+#         /* Mobile */
+#         @media (max-width: 600px) {
+
+#             div[data-testid="stChatInput"] {
+#                 width: 100% !important;
+#             }
+
+#         }
+
+#         </style>
+#         """,
+#         unsafe_allow_html=True,
+#     )
+
 def render_ai_analyst():
     """
     Floating AI FMCG Analyst chatbot.
-
-    The chatbot is available on every page. It opens automatically
-    on the first visit and can be minimized/reopened using the
-    floating robot button.
     """
 
     from streamlit_float import float_init
 
-    # Initialize floating containers
     float_init()
 
     # ---------------------------------------------------------
@@ -831,11 +1219,10 @@ def render_ai_analyst():
         st.session_state.ai_analyst_history = []
 
     if "ai_analyst_open" not in st.session_state:
-        # Open automatically on first visit
         st.session_state.ai_analyst_open = True
 
     # ---------------------------------------------------------
-    # Floating chatbot window
+    # Floating chatbot
     # ---------------------------------------------------------
     if st.session_state.ai_analyst_open:
 
@@ -843,25 +1230,19 @@ def render_ai_analyst():
 
         with chat_container:
 
-            # Header
+            # Header (single markdown call, no blank line between the two
+            # <div> blocks — a blank line here gets turned into an empty
+            # <p></p> by the markdown parser, which is what was causing
+            # the extra gap under "Online").
             header_col1, header_col2 = st.columns([8, 1])
 
             with header_col1:
                 st.markdown(
                     """
-                    <div style="
-                        font-size: 1.15rem;
-                        font-weight: 700;
-                        padding-top: 4px;
-                    ">
+                    <div style="font-size: 1rem; font-weight: 700; color: #f5f7fa; margin: 0;">
                         🤖 FMCG Analyst
                     </div>
-
-                    <div style="
-                        font-size: 0.78rem;
-                        color: #22c55e;
-                        margin-top: -4px;
-                    ">
+                    <div style="font-size: 0.68rem; color: #22c55e; margin: 0;">
                         ● Online
                     </div>
                     """,
@@ -877,84 +1258,83 @@ def render_ai_analyst():
                     st.session_state.ai_analyst_open = False
                     st.rerun()
 
-            st.divider()
+            # -------------------------------------------------
+            # Body: ONE fixed-height, self-scrolling container that
+            # holds either the welcome/examples state or the chat
+            # history — never both, and it's the *only* scrollable
+            # region in the panel.
+            #
+            # Why this matters: previously the header, welcome
+            # message, and history all lived in the same scroll
+            # region as the page. When st.chat_input's textarea got
+            # focus, the browser auto-scrolled that whole region to
+            # keep the input visible — which dragged the header off
+            # the top of the panel (image 1) and left blank space
+            # where the header/message used to sit (image 2).
+            #
+            # By giving this body a fixed pixel height (Streamlit
+            # makes any st.container(height=N) internally scrollable
+            # on its own), the header above it and the chat_input /
+            # clear button below it sit in normal, non-scrolling flow
+            # and can never be scrolled out of view.
+            # -------------------------------------------------
+            body = st.container(height=420)
 
-            # -------------------------------------------------
-            # Welcome message
-            # -------------------------------------------------
-            if not st.session_state.ai_analyst_history:
-                st.markdown(
-                    """
-                    <div style="
-                        background: #f3f6fb;
-                        border-radius: 14px;
-                        padding: 14px;
-                        margin-bottom: 10px;
-                    ">
-                        <div style="
-                            font-size: 1rem;
-                            font-weight: 600;
-                            margin-bottom: 6px;
-                        ">
-                            Hi! 👋 I'm your FMCG Analyst
+            with body:
+
+                if not st.session_state.ai_analyst_history:
+
+                    st.markdown(
+                        """
+                        <div style="background: #20232c; border-radius: 10px; padding: 9px; margin: 0 0 7px 0;">
+                            <div style="font-size: 0.82rem; font-weight: 600; color: #f5f7fa; margin-bottom: 3px;">
+                                Hi! 👋 How can I help?
+                            </div>
+                            <div style="font-size: 0.70rem; line-height: 1.35; color: #b8bec9;">
+                                Ask me about sales, revenue, inventory,
+                                promotions or forecasts.
+                            </div>
                         </div>
-
-                        <div style="
-                            font-size: 0.88rem;
-                            line-height: 1.45;
-                        ">
-                            I can help you analyze sales, revenue,
-                            inventory, promotions, and forecasts.
+                        <div style="font-size: 0.70rem; color: #9ca3af; margin-bottom: 3px;">
+                            💡 Try asking
                         </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
 
-                        <div style="
-                            font-size: 0.88rem;
-                            font-weight: 600;
-                            margin-top: 10px;
-                        ">
-                            What would you like to know?
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+                    # Keep examples compact
+                    example_questions = [
+                        "Total sales in 2024?",
+                        "Highest-selling category?",
+                        "Highest inventory region?",
+                        "Did promotions increase sales?",
+                    ]
 
-                st.caption("💡 Try asking:")
+                    for i, question in enumerate(example_questions):
 
-                example_questions = [
-                    "What were the total sales in 2024?",
-                    "Which category had the highest sales?",
-                    "Which region has the highest average inventory?",
-                    "Did promotions increase sales?",
-                ]
+                        if st.button(
+                            question,
+                            key=f"ai_example_{i}",
+                            use_container_width=True,
+                        ):
+                            st.session_state.ai_pending_question = question
+                            st.rerun()
 
-                for i, question in enumerate(example_questions):
-                    if st.button(
-                        question,
-                        key=f"ai_example_{i}",
-                        use_container_width=True,
-                    ):
-                        st.session_state.ai_pending_question = question
-                        st.rerun()
+                else:
 
-            # -------------------------------------------------
-            # Conversation
-            # -------------------------------------------------
-            history_container = st.container(height=200)
+                    for turn in st.session_state.ai_analyst_history:
 
-            with history_container:
-                for turn in st.session_state.ai_analyst_history:
-                    with st.chat_message(
-                        turn["role"],
-                        avatar="🤖" if turn["role"] == "assistant" else "👤",
-                    ):
-                        st.markdown(turn["content"])
+                        with st.chat_message(
+                            turn["role"],
+                            avatar="🤖" if turn["role"] == "assistant" else "👤",
+                        ):
+                            st.markdown(turn["content"])
 
             # -------------------------------------------------
             # Chat input
             # -------------------------------------------------
             user_question = st.chat_input(
-                "Ask about sales, revenue, inventory or forecasts...",
+                "Ask about sales, revenue, inventory...",
                 key="ai_chat_input",
             )
 
@@ -978,7 +1358,7 @@ def render_ai_analyst():
                     }
                 )
 
-                with st.spinner("Analyzing your question..."):
+                with st.spinner("Analyzing..."):
 
                     response = api.chat(
                         user_question,
@@ -1008,55 +1388,68 @@ def render_ai_analyst():
                 st.rerun()
 
             # -------------------------------------------------
-            # Footer
+            # Clear button
             # -------------------------------------------------
-            footer_col1, footer_col2 = st.columns([5, 2])
+            if st.session_state.ai_analyst_history:
 
-            with footer_col1:
-                st.caption("⚡ Powered by Groq + LangGraph")
-
-            with footer_col2:
                 if st.button(
-                    "Clear",
+                    "Clear conversation",
                     key="ai_clear",
                     use_container_width=True,
                 ):
                     st.session_state.ai_analyst_history = []
                     st.rerun()
 
-        # Float the entire chat window
-        # chaat_container.float(
-        #     """
-        #     width: 390px;
-        #     mx-width: calc(100vw - 2rem);
-        #     right: 1rem;
-        #     bottom: 5.2rem;
-        #     z-index: 9999;
-        #     background: white;
-        #     border: 1px solid rgba(0, 0, 0, 0.12);
-        #     border-radius: 18px;
-        #     padding: 16px;
-        #     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.22);
-        #     """
-        # )
-
+        # -----------------------------------------------------
+        # Float chat window
+        #
+        # FIX 1: pin the panel between a `top` and a `bottom` offset
+        # instead of anchoring only to `bottom` with a fixed max-height.
+        # With only `bottom` + `max-height`, on a short viewport the panel
+        # simply grows upward past the top edge of the browser window and
+        # that portion is unreachable (it's a fixed-position element, so
+        # page-scrolling doesn't bring it back). Setting both `top` and
+        # `bottom` forces the browser to compute a height that always
+        # fits inside the viewport.
+        #
+        # FIX 2: `overflow-y: auto` here is now just a fallback for very
+        # small screens. In normal use, header + body(210px) + input +
+        # clear button fit comfortably inside the top/bottom window, so
+        # this outer scroll never actually engages — which is what stops
+        # chat_input's focus-scroll from dragging the whole panel around
+        # (see the `body` container above for the real fix).
+        # -----------------------------------------------------
         chat_container.float(
             """
-            width: 330px;
-            max-width: calc(100vw - 1.5rem);
-            right: 0.8rem;
-            bottom: 5.5rem;
+            width: 320px;
+            max-width: calc(100vw - 1rem);
+
+            right: 0.75rem;
+            top: 4rem;
+            bottom: 5.2rem;
+
             z-index: 9999;
-            background: #ffffff;
-            border: 1px solid rgba(0, 0, 0, 0.12);
+
+            background: #16181f;
+            color: #f5f7fa;
+
+            border: 1px solid #30333d;
             border-radius: 16px;
-            padding: 12px;
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+
+            padding: 10px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+            display: flex;
+            flex-direction: column;
+
+            overflow-y: auto;
+            overflow-x: hidden;
             """
         )
 
     # ---------------------------------------------------------
-    # Floating robot launcher
+    # Robot launcher
     # ---------------------------------------------------------
 
     launcher = st.container()
@@ -1073,49 +1466,156 @@ def render_ai_analyst():
 
     launcher.float(
         """
-        width: 52px;
-        height: 52px;
-        right: 1.0rem;
-        bottom: 1.8rem;
+        width: 46px;
+        height: 46px;
+
+        right: 0.9rem;
+        bottom: 4.6rem;
+
         z-index: 10000;
+
         border-radius: 50%;
-        background: linear-gradient(135deg, #2563eb, #1d4ed8);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.40);
+
+        background: linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+        box-shadow:
+            0 6px 18px rgba(37, 99, 235, 0.40);
+
         padding: 0;
         text-align: center;
         """
     )
 
     # ---------------------------------------------------------
-    # Robot button styling
+    # Styling
     # ---------------------------------------------------------
+
     st.markdown(
         """
         <style>
 
-        /* Floating robot button */
-        div[data-testid="stButton"] button[kind="secondary"] {
-            border-radius: 50%;
+        /* ================================
+           FMCG AI ANALYST
+           ================================ */
+
+        /* General buttons */
+        div[data-testid="stButton"] > button {
+            border-radius: 9px;
+            border: 1px solid #30333d;
+            background: #20232c;
+            color: #f5f7fa;
+
+            font-size: 0.72rem;
+            padding: 5px 8px;
+
+            min-height: 32px;
+
+            transition: 0.2s ease;
         }
 
-        /* Make the robot emoji larger */
-        div[data-testid="stButton"] button {
-            font-size: 1.45rem;
+        div[data-testid="stButton"] > button:hover {
+            border-color: #3b82f6;
+            background: #272b36;
+            color: #ffffff;
         }
 
-        /* Chat window buttons */
-        div[data-testid="stVerticalBlock"] button {
-            border-radius: 10px;
+        /* Close button */
+        button[aria-label="Close AI Analyst"] {
+            background: transparent !important;
+            border: none !important;
+
+            color: #9ca3af !important;
+
+            font-size: 1.15rem !important;
+            padding: 0 !important;
+
+            min-height: 25px !important;
         }
 
-        /* Mobile adjustment */
+        button[aria-label="Close AI Analyst"]:hover {
+            color: #ffffff !important;
+            background: transparent !important;
+        }
+
+        /* Chat input */
+        div[data-testid="stChatInput"] {
+            background: #20232c !important;
+            border: 1px solid #3a3e49 !important;
+            border-radius: 10px !important;
+
+            margin-top: 5px !important;
+        }
+
+        div[data-testid="stChatInput"] textarea {
+            background: #20232c !important;
+            color: #f5f7fa !important;
+
+            font-size: 0.75rem !important;
+        }
+
+        div[data-testid="stChatInput"] textarea::placeholder {
+            color: #8f96a3 !important;
+        }
+
+        /* Chat messages */
+        div[data-testid="stChatMessage"] {
+            background: #20232c !important;
+
+            border-radius: 9px !important;
+
+            padding: 6px !important;
+
+            margin-bottom: 4px !important;
+
+            font-size: 0.75rem !important;
+        }
+
+        /* Spinner */
+        div[data-testid="stSpinner"] {
+            color: #60a5fa !important;
+        }
+
+        /* Hide unnecessary spacing */
+        div[data-testid="stVerticalBlock"] {
+            gap: 0.25rem;
+        }
+
+        /* Kill Streamlit's default element/column spacing so the panel
+           doesn't grow taller than its actual content (this is what was
+           showing up as "extra space after Online" and was also
+           contributing to the panel overflowing the viewport). */
+        div[data-testid="stMarkdownContainer"] > p {
+            margin: 0 !important;
+        }
+
+        div[data-testid="element-container"] {
+            margin-bottom: 0 !important;
+        }
+
+        div[data-testid="stHorizontalBlock"] {
+            gap: 0.25rem !important;
+            margin-bottom: 0 !important;
+            align-items: center !important;
+        }
+
+        div[data-testid="stColumn"] {
+            padding: 0 !important;
+        }
+
+        /* Mobile */
         @media (max-width: 600px) {
-            .floating {
-                right: 0.6rem !important;
+
+            div[data-testid="stChatInput"] {
+                width: 100% !important;
             }
+
         }
 
         </style>
         """,
         unsafe_allow_html=True,
-    )     
+    )
